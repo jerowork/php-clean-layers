@@ -1,0 +1,45 @@
+{
+    "name": "jerowork/php-clean-layers",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jeroen de Graaf",
+            "email": "hello@jero.work"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "jerowork/object-dependencies-parser": "^0.3",
+        "symfony/console": "^6.2",
+        "symfony/finder": "^6.2",
+        "symfony/yaml": "^6.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.14",
+        "maglnet/composer-require-checker": "^4.5",
+        "phpro/grumphp": "^1.15",
+        "phpstan/phpstan": "^1.9",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Jerowork\\PHPCleanLayers\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jerowork\\PHPCleanLayers\\Test\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "phpcsfixer": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon"
+    }
+}
