@@ -1,7 +1,16 @@
 {
     "name": "jerowork/php-clean-layers",
+    "description": "Guard your architectural layers with static analysis.",
     "license": "MIT",
-    "type": "library",
+    "type": "project",
+    "keywords": [
+        "architecture",
+        "clean-architecture",
+        "layers",
+        "guard",
+        "static-analysis",
+        "testing"
+    ],
     "authors": [
         {
             "name": "Jeroen de Graaf",
@@ -9,8 +18,10 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "jerowork/object-dependencies-parser": "^0.3",
+        "php": "^8.1",
+        "beberlei/assert": "^3.3",
+        "jerowork/class-dependencies-parser": "^0.5",
+        "jerowork/file-class-reflector": "^0.3",
         "symfony/console": "^6.2",
         "symfony/finder": "^6.2",
         "symfony/yaml": "^6.2"
@@ -39,7 +50,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "phpcsfixer": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes",
+        "phpcsfixer": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes",
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon"
     }
 }
