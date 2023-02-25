@@ -51,6 +51,8 @@
     },
     "scripts": {
         "phpcsfixer": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes",
-        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon"
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
+        "phpstan-baseline": "vendor/bin/phpstan analyse -c phpstan.neon --generate-baseline",
+        "phpunit": "XDEBUG_MODE=coverage vendor/bin/phpunit"
     }
 }

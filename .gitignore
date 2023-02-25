@@ -1,5 +1,6 @@
 /.phpunit.cache/
 /bin-dev/
+/var/
 /vendor/
 .php-cs-fixer.cache
 .phpunit.result.cache

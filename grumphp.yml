@@ -9,3 +9,7 @@ grumphp:
             allow_risky: true
         phpunit:
             config_file: phpunit.xml
+            always_execute: true
+        clover_coverage:
+            clover_file: var/coverage/clover.xml
+            level: 100
