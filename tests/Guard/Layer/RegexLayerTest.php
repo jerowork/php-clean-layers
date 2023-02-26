@@ -48,13 +48,9 @@ final class RegexLayerTest extends TestCase
             ->excluding('Sub1', 'Sub2')
             ->excluding('Sub3', 'Sub3');
 
-        /* @phpstan-ignore-next-line */
         self::assertFalse($layer->isPartOf('Another\Layer\Class'));
-        /* @phpstan-ignore-next-line */
         self::assertTrue($layer->isPartOf('Some\Layer\Class'));
-        /* @phpstan-ignore-next-line */
         self::assertTrue($layer->isPartOf('Some\Layer\Sub4\Class'));
-        /* @phpstan-ignore-next-line */
         self::assertFalse($layer->isPartOf('Some\Layer\Sub3\Class'));
     }
 }

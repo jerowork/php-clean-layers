@@ -27,9 +27,7 @@ final class RootLevelClassesTest extends TestCase
      */
     public function itShouldPartOfRootLevel(): void
     {
-        /* @phpstan-ignore-next-line */
         self::assertFalse((new RootLevelClasses())->isPartOf('Some\Layer'));
-        /* @phpstan-ignore-next-line */
         self::assertTrue((new RootLevelClasses())->isPartOf('Some'));
     }
 }
