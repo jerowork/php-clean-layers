@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 $finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
-    ->exclude(['vendor', 'tests/PhpParser/Stub']);
+    ->in(['src', 'tests']);
 
 return (new PhpCsFixer\Config())
     ->setRules([
