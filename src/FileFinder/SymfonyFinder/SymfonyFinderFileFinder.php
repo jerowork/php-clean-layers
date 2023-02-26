@@ -6,6 +6,7 @@ namespace Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder;
 
 use Jerowork\PHPCleanLayers\FileFinder\DirectoryNotFoundException;
 use Jerowork\PHPCleanLayers\FileFinder\FileFinder;
+use SplFileInfo;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException as SymfonyDirectoryNotFoundException;
 
 final class SymfonyFinderFileFinder implements FileFinder
@@ -27,11 +28,6 @@ final class SymfonyFinderFileFinder implements FileFinder
             throw DirectoryNotFoundException::create($directory, $exception);
         }
 
-        $files = [];
-        foreach ($finder as $file) {
-            $files[] = $file->getRealPath();
-        }
-
-        return $files;
+        return array_values(array_map(fn (SplFileInfo $file) => $file->getRealPath(), iterator_to_array($finder)));
     }
 }
