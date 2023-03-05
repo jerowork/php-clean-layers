@@ -12,9 +12,19 @@ $ignoreErrors = [];
 	'path' => __DIR__ . '/tests/Analyser/ClassIsPartOfLayerTraitTest.php',
 ];
    $ignoreErrors[] = [
+	'message' => '#^Parameter \\#2 \\$class of method Jerowork\\\\PHPCleanLayers\\\\Analyser\\\\RuleProcessor\\\\NotBeAllowedByRuleProcessor\\:\\:handle\\(\\) expects class\\-string, string given\\.$#',
+	'count' => 3,
+	'path' => __DIR__ . '/tests/Analyser/RuleProcessor/NotBeAllowedByRuleProcessorTest.php',
+];
+   $ignoreErrors[] = [
 	'message' => '#^Parameter \\#2 \\$class of method Jerowork\\\\PHPCleanLayers\\\\Analyser\\\\RuleProcessor\\\\NotDependOnRuleProcessor\\:\\:handle\\(\\) expects class\\-string, string given\\.$#',
 	'count' => 3,
 	'path' => __DIR__ . '/tests/Analyser/RuleProcessor/NotDependOnRuleProcessorTest.php',
+];
+   $ignoreErrors[] = [
+	'message' => '#^Parameter \\#2 \\$class of method Jerowork\\\\PHPCleanLayers\\\\Analyser\\\\RuleProcessor\\\\OnlyBeAllowedByRuleProcessor\\:\\:handle\\(\\) expects class\\-string, string given\\.$#',
+	'count' => 3,
+	'path' => __DIR__ . '/tests/Analyser/RuleProcessor/OnlyBeAllowedByRuleProcessorTest.php',
 ];
    $ignoreErrors[] = [
 	'message' => '#^Parameter \\#2 \\$class of method Jerowork\\\\PHPCleanLayers\\\\Analyser\\\\RuleProcessor\\\\OnlyDependOnRuleProcessor\\:\\:handle\\(\\) expects class\\-string, string given\\.$#',
