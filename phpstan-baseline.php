@@ -7,6 +7,11 @@ $ignoreErrors = [];
 	'path' => __DIR__ . '/src/Guard/Rule/AbstractLayeredRule.php',
 ];
    $ignoreErrors[] = [
+	'message' => '#^Parameter \\#1 \\$class of method class@anonymous/tests/Analyser/ClassIsPartOfLayerTraitTest\\.php\\:21\\:\\:classIsPartOfLayer\\(\\) expects class\\-string, string given\\.$#',
+	'count' => 2,
+	'path' => __DIR__ . '/tests/Analyser/ClassIsPartOfLayerTraitTest.php',
+];
+   $ignoreErrors[] = [
 	'message' => '#^Parameter \\#1 \\$class of method Jerowork\\\\PHPCleanLayers\\\\Guard\\\\Layer\\\\RegexLayer\\:\\:isPartOf\\(\\) expects class\\-string, string given\\.$#',
 	'count' => 4,
 	'path' => __DIR__ . '/tests/Guard/Layer/RegexLayerTest.php',
