@@ -1,0 +1,66 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Jerowork\ClassDependenciesParser\PhpParser\NodeTraverserFactory;
+use Jerowork\ClassDependenciesParser\PhpParser\PhpParserClassDependenciesParser;
+use Jerowork\FileClassReflector\FileFinder\RegexIterator\RegexIteratorFileFinder;
+use Jerowork\FileClassReflector\NikicParser\NikicParserClassReflectorFactory;
+use Jerowork\PHPCleanLayers\Analyser\GuardAnalyser;
+use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotBeAllowedByRuleProcessor;
+use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotDependOnRuleProcessor;
+use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyBeAllowedByRuleProcessor;
+use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyDependOnRuleProcessor;
+use Jerowork\PHPCleanLayers\Cli\Command\RunCommand;
+use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFactory;
+use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFileFinder;
+use Jerowork\PHPCleanLayers\Loader\Config\SymfonyYaml\SymfonyYamlConfigLoader;
+use Jerowork\PHPCleanLayers\Loader\Guard\ClassReflector\ClassReflectorGuardLoader;
+use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Yaml\Parser;
+
+// Remove execution time limit
+set_time_limit(0);
+
+function includeIfExists(string $file): bool
+{
+    return file_exists($file) && include $file;
+}
+
+// Initialize autoloader
+if (!includeIfExists(__DIR__ . '/../vendor/autoload.php') &&
+    !includeIfExists(__DIR__ . '/../../vendor/autoload.php') &&
+    !includeIfExists(__DIR__ . '/../../../vendor/autoload.php') &&
+    !includeIfExists(__DIR__ . '/../../../../vendor/autoload.php')
+) {
+    throw new Exception('Failed to autoload');
+}
+
+$console = new Application('PHPCleanLayers', '0.1.0');
+
+$console->add(new RunCommand(
+    new SymfonyYamlConfigLoader(new Parser()),
+    $fileFinder = new SymfonyFinderFileFinder(new SymfonyFinderFactory()),
+    new PhpParserClassDependenciesParser(
+        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+        new NodeTraverserFactory(),
+    ),
+    new ClassReflectorGuardLoader(
+        new NikicParserClassReflectorFactory(
+            new RegexIteratorFileFinder(),
+            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+            new NodeTraverser(),
+        ),
+    ),
+    new GuardAnalyser([
+        new OnlyDependOnRuleProcessor(),
+        new NotDependOnRuleProcessor(),
+        new OnlyBeAllowedByRuleProcessor(),
+        new NotBeAllowedByRuleProcessor(),
+    ]),
+));
+
+$console->run();

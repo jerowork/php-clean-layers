@@ -43,6 +43,9 @@
             "Jerowork\\PHPCleanLayers\\Test\\": "tests/"
         }
     },
+    "bin": [
+        "bin/phpcl"
+    ],
     "config": {
         "allow-plugins": {
             "phpro/grumphp": true
