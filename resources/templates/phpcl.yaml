@@ -1,0 +1,5 @@
+parameters:
+  path:
+    source: ./src
+    guards:
+      - CleanArchitectureGuard.php

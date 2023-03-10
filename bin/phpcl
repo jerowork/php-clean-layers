@@ -12,6 +12,7 @@ use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotBeAllowedByRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotDependOnRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyBeAllowedByRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyDependOnRuleProcessor;
+use Jerowork\PHPCleanLayers\Cli\Command\InitCommand;
 use Jerowork\PHPCleanLayers\Cli\Command\RunCommand;
 use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFactory;
 use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFileFinder;
@@ -41,6 +42,7 @@ if (!includeIfExists(__DIR__ . '/../vendor/autoload.php') &&
 
 $console = new Application('PHPCleanLayers', '0.1.0');
 
+$console->add(new InitCommand());
 $console->add(new RunCommand(
     new SymfonyYamlConfigLoader(new Parser()),
     $fileFinder = new SymfonyFinderFileFinder(new SymfonyFinderFactory()),
