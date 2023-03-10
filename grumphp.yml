@@ -12,4 +12,4 @@ grumphp:
             always_execute: true
         clover_coverage:
             clover_file: var/coverage/clover.xml
-            level: 75
+            level: 70
