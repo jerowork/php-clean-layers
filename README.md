@@ -8,8 +8,82 @@
 
 Guard your architectural layers with static analysis.
 
+The word 'clean' is a 😉 to Uncle Bob's [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) (also known as Hexagonal Architecture).
+
 ## Installation
 Install via Composer:
 ```bash
 composer require --dev jerowork/php-clean-layers
+```
+
+## Configuration
+Copy the necessary configuration files in your root directory with:
+```bash
+vendor/bin/phpcl init
+```
+
+It will copy a configuration yaml file [`phpcl.yaml`](resources/templates/phpcl.yaml) and a template Guard test class [`CleanArchitectureGuard.php`](resources/templates/CleanArchitectureGuard.php).
+
+### The configuration file
+```yaml
+parameters:
+  path:
+    source: ./src
+    guards:
+      - CleanArchitectureGuard.php
+```
+
+Configuration options:
+
+| Option         | Description                                                                       | Format                       |
+|----------------|-----------------------------------------------------------------------------------|------------------------------|
+| `path.source`  | Path to your src directory                                                        | `string`                     | 
+| `path.guards`  | A set of paths to your Guard test classes (directories and/or direct files paths) | `list\<string\>` or `string` |
+
+### The Guard test class 
+A Guard test class consists of one or more test cases, registered with the `#[Test]` Attributes.
+Each test case returns a `Guard` with one or more `Rules`:
+
+```php
+use Jerowork\PHPCleanLayers\Attribute\Test;
+use Jerowork\PHPCleanLayers\Guard\Guard;
+use Jerowork\PHPCleanLayers\Guard\Layer\RegexLayer;
+use Jerowork\PHPCleanLayers\Guard\Layer\RootLevelClasses;
+use Jerowork\PHPCleanLayers\Guard\Rule\OnlyDependOn;
+use Jerowork\PHPCleanLayers\Guard\Rule\NotBeAllowedBy;
+
+final class SomeGuard
+{
+    #[Test]
+    public function guardThatLayerOnlyDependsOnX(): Guard
+    {
+        return Guard::layer('Some\Layer')
+            ->should(new OnlyDependOn(
+                new RootLevelClasses(),
+                'Depend\On\Layer',
+                RegexLayer::create('Depend\On\Another\Layer')
+                    ->excluding('SubLayer1', 'SubLayer2'),
+            ))
+            ->should(new NotBeAllowedBy('Not\Allowed\Layer'));
+    }
+}
+```
+
+Available Rules:
+
+| Rule              | Description                                                  |
+|-------------------|--------------------------------------------------------------|
+| `NotDependOn`     | Define which layers the guarded layer should not depend on.  |
+| `OnlyDependOn`    | Define which layers the guarded layer should only depend on. |
+| `NoBeAllowedBy`   | Define which layers cannot use the guarded layer.            |
+| `OnlyBeAllowedBy` | Define which layers can only use the guarded layer.          |
+
+All layer input argument are by default of format `string`. For more complex layer definitions, use the `RegexLayer`.
+
+The predefined layer `RootLevelClasses` can be used to for native PHP functions, classes, etc.
+
+## Usage
+Run the following:
+```bash
+vendor/bin/phpcl guard [--config=./phpcl.yaml]
 ```
