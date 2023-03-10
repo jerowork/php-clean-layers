@@ -28,6 +28,10 @@ final class SymfonyFinderFileFinder implements FileFinder
             throw DirectoryNotFoundException::create($directory, $exception);
         }
 
-        return array_values(array_map(fn (SplFileInfo $file) => $file->getRealPath(), iterator_to_array($finder)));
+        $files = array_values(array_map(fn (SplFileInfo $file) => $file->getRealPath(), iterator_to_array($finder)));
+
+        sort($files);
+
+        return $files;
     }
 }
