@@ -56,7 +56,7 @@ final class RunCommand extends Command
         $config = $this->configLoader->load($configPath);
 
         $sourceFiles = $this->fileFinder->load($config->sourcePath);
-        $guards = $this->guardClassLoader->load($config->guardsPath);
+        $guards = $this->guardClassLoader->load(...$config->guardsPaths);
         $classDependencies = array_map(fn ($sourceFile) => $this->classDependenciesParser->parse($sourceFile), $sourceFiles);
 
         // Prepare

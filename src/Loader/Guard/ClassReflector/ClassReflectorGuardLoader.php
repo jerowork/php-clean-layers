@@ -7,11 +7,9 @@ namespace Jerowork\PHPCleanLayers\Loader\Guard\ClassReflector;
 use Jerowork\FileClassReflector\ClassReflectorFactory;
 use Jerowork\PHPCleanLayers\Attribute\Test;
 use Jerowork\PHPCleanLayers\Guard\Guard;
-use Jerowork\PHPCleanLayers\Loader\Guard\DirectoryNotFoundException;
 use Jerowork\PHPCleanLayers\Loader\Guard\GuardLoader;
 use Jerowork\PHPCleanLayers\Loader\Guard\InvalidTestException;
 use ReflectionNamedType;
-use UnexpectedValueException;
 
 final class ClassReflectorGuardLoader implements GuardLoader
 {
@@ -20,24 +18,25 @@ final class ClassReflectorGuardLoader implements GuardLoader
     ) {
     }
 
-    public function load(string $directory): array
+    public function load(string ...$paths): array
     {
-        try {
-            $reflector = $this->classReflectorFactory
-                ->create()
-                ->addDirectory($directory);
-        } catch (UnexpectedValueException $exception) {
-            throw DirectoryNotFoundException::create($directory, $exception);
-        }
+        $reflector = $this->classReflectorFactory
+            ->create()
+            ->addFile(...array_filter($paths, fn ($path) => is_file($path)))
+            ->addDirectory(...array_filter($paths, fn ($path) => is_dir($path)));
 
         // Load if not registered in Composer
         foreach ($reflector->getFiles() as $file) {
-            require $file;
+            require_once $file;
         }
 
         $guards = [];
-
+        $processedClasses = [];
         foreach ($reflector->reflect()->getClasses() as $class) {
+            if (in_array($class->name, $processedClasses, true)) {
+                continue;
+            }
+
             $className = $class->name;
             $guardClass = new $className();
 
@@ -61,6 +60,7 @@ final class ClassReflectorGuardLoader implements GuardLoader
                 }
 
                 $guards[] = $callable();
+                $processedClasses[] = $class->name;
             }
         }
 

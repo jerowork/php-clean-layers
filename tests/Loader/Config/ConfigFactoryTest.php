@@ -31,7 +31,7 @@ final class ConfigFactoryTest extends TestCase
         $config = ConfigFactory::createFromPayload(['parameters' => null]);
 
         self::assertSame('./src', $config->sourcePath);
-        self::assertSame('./tests/Guards', $config->guardsPath);
+        self::assertSame(['./tests/Guards'], $config->guardsPaths);
     }
 
     /**
@@ -47,6 +47,25 @@ final class ConfigFactoryTest extends TestCase
         ]]);
 
         self::assertSame('/custom/path/to/src', $config->sourcePath);
-        self::assertSame('/custom/path/to/Guards', $config->guardsPath);
+        self::assertSame(['/custom/path/to/Guards'], $config->guardsPaths);
+    }
+
+    /**
+     * @test
+     */
+    public function itShouldCreateConfigWithMixedListOfGuardDirectoriesAndClasses(): void
+    {
+        $config = ConfigFactory::createFromPayload(['parameters' => [
+            'path' => [
+                'source' => '/custom/path/to/src',
+                'guards' => [
+                    '/custom/path/to/Guards',
+                    '/custom/path/Guard.php',
+                ],
+            ],
+        ]]);
+
+        self::assertSame('/custom/path/to/src', $config->sourcePath);
+        self::assertSame(['/custom/path/to/Guards', '/custom/path/Guard.php'], $config->guardsPaths);
     }
 }

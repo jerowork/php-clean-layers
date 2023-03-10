@@ -9,10 +9,9 @@ use Jerowork\PHPCleanLayers\Guard\Guard;
 interface GuardLoader
 {
     /**
-     * @throws DirectoryNotFoundException
      * @throws InvalidTestException
      *
      * @return list<Guard>
      */
-    public function load(string $directory): array;
+    public function load(string ...$paths): array;
 }

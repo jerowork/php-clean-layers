@@ -10,7 +10,6 @@ use Jerowork\PHPCleanLayers\Guard\Guard;
 use Jerowork\PHPCleanLayers\Guard\Rule\NotBeAllowedBy;
 use Jerowork\PHPCleanLayers\Guard\Rule\OnlyBeAllowedBy;
 use Jerowork\PHPCleanLayers\Loader\Guard\ClassReflector\ClassReflectorGuardLoader;
-use Jerowork\PHPCleanLayers\Loader\Guard\DirectoryNotFoundException;
 use Jerowork\PHPCleanLayers\Loader\Guard\InvalidTestException;
 use Jerowork\PHPCleanLayers\Test\Loader\Guard\ClassReflector\Stub\GuardDoesNotReturnStub;
 use PhpParser\NodeTraverser;
@@ -40,23 +39,16 @@ final class ClassReflectorGuardLoaderTest extends TestCase
     /**
      * @test
      */
-    public function itShouldFailWhenDirectoryIsNotFound(): void
-    {
-        self::expectException(DirectoryNotFoundException::class);
-
-        $this->loader->load('invalid');
-    }
-
-    /**
-     * @test
-     */
     public function itShouldLoadGuards(): void
     {
-        $guards = $this->loader->load(__DIR__ . '/Resources');
+        $guards = $this->loader->load(
+            __DIR__ . '/Resources/Directory',
+            __DIR__ . '/Resources/AnotherGuard.php',
+        );
 
-        self::assertCount(2, $guards);
+        self::assertCount(3, $guards);
 
-        [$guard1, $guard2] = $guards;
+        [$guard1, $guard2, $guard3] = $guards;
 
         self::assertEquals(
             Guard::layer('Some\Layer')->should(new OnlyBeAllowedBy('Another\Layer')),
@@ -64,8 +56,13 @@ final class ClassReflectorGuardLoaderTest extends TestCase
         );
 
         self::assertEquals(
-            Guard::layer('Another\Layer')->should(new NotBeAllowedBy('Some\Layer')),
+            Guard::layer('Some\Layer')->should(new OnlyBeAllowedBy('Another\Layer')),
             $guard2,
+        );
+
+        self::assertEquals(
+            Guard::layer('Another\Layer')->should(new NotBeAllowedBy('Some\Layer')),
+            $guard3,
         );
     }
 

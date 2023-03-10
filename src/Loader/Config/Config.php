@@ -6,9 +6,12 @@ namespace Jerowork\PHPCleanLayers\Loader\Config;
 
 final class Config
 {
+    /**
+     * @param list<string> $guardsPaths
+     */
     public function __construct(
         public readonly string $sourcePath,
-        public readonly string $guardsPath,
+        public readonly array $guardsPaths,
     ) {
     }
 }
