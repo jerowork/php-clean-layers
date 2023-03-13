@@ -27,5 +27,6 @@ return (new PhpCsFixer\Config())
         ],
         'multiline_whitespace_before_semicolons' => false,
         'single_line_throw' => false,
+        'binary_operator_spaces' => false,
     ])
     ->setFinder($finder);
