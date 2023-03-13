@@ -13,7 +13,8 @@ use Assert\AssertionFailedException;
  *      path?: array{
  *          source?: string,
  *          guards?: string|list<string>
- *      }
+ *      },
+ *      baseline?: string
  *  }
  * }
  */
@@ -21,6 +22,7 @@ final class ConfigFactory
 {
     private const DEFAULT_SOURCE_PATH = './src';
     private const DEFAULT_GUARDS_PATH = './tests/Guards';
+    private const DEFAULT_BASELINE = './phpcl-baseline.yaml';
 
     /**
      * @param ConfigPayload $payload
@@ -34,6 +36,7 @@ final class ConfigFactory
         return new Config(
             $payload['parameters']['path']['source'] ?? self::DEFAULT_SOURCE_PATH,
             (array) ($payload['parameters']['path']['guards'] ?? [self::DEFAULT_GUARDS_PATH]),
+            $payload['parameters']['baseline'] ?? self::DEFAULT_BASELINE,
         );
     }
 }

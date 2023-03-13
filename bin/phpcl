@@ -12,8 +12,9 @@ use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotBeAllowedByRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\NotDependOnRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyBeAllowedByRuleProcessor;
 use Jerowork\PHPCleanLayers\Analyser\RuleProcessor\OnlyDependOnRuleProcessor;
-use Jerowork\PHPCleanLayers\Cli\Command\InitCommand;
+use Jerowork\PHPCleanLayers\Baseline\SymfonyYaml\SymfonyYamlBaseliner;
 use Jerowork\PHPCleanLayers\Cli\Command\GuardCommand;
+use Jerowork\PHPCleanLayers\Cli\Command\InitCommand;
 use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFactory;
 use Jerowork\PHPCleanLayers\FileFinder\SymfonyFinder\SymfonyFinderFileFinder;
 use Jerowork\PHPCleanLayers\Loader\Config\SymfonyYaml\SymfonyYamlConfigLoader;
@@ -21,6 +22,7 @@ use Jerowork\PHPCleanLayers\Loader\Guard\ClassReflector\ClassReflectorGuardLoade
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 
 // Remove execution time limit
@@ -44,7 +46,8 @@ $console = new Application('PHPCleanLayers', '0.1.0');
 
 $console->add(new InitCommand());
 $console->add(new GuardCommand(
-    new SymfonyYamlConfigLoader(new Parser()),
+    new SymfonyYamlConfigLoader($yamlParser = new Parser()),
+    new SymfonyYamlBaseliner($yamlParser, new Dumper()),
     $fileFinder = new SymfonyFinderFileFinder(new SymfonyFinderFactory()),
     new PhpParserClassDependenciesParser(
         $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7),

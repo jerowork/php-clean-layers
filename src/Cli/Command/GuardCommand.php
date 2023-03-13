@@ -8,6 +8,7 @@ use Jerowork\ClassDependenciesParser\ClassDependenciesParser;
 use Jerowork\PHPCleanLayers\Analyser\CheckTick;
 use Jerowork\PHPCleanLayers\Analyser\ClassIsPartOfLayerTrait;
 use Jerowork\PHPCleanLayers\Analyser\GuardAnalyser;
+use Jerowork\PHPCleanLayers\Baseline\Baseliner;
 use Jerowork\PHPCleanLayers\FileFinder\FileFinder;
 use Jerowork\PHPCleanLayers\Loader\Config\ConfigLoader;
 use Jerowork\PHPCleanLayers\Loader\Guard\GuardLoader;
@@ -26,6 +27,7 @@ final class GuardCommand extends Command
 
     public function __construct(
         private readonly ConfigLoader $configLoader,
+        private readonly Baseliner $baseliner,
         private readonly FileFinder $fileFinder,
         private readonly ClassDependenciesParser $classDependenciesParser,
         private readonly GuardLoader $guardClassLoader,
@@ -42,6 +44,13 @@ final class GuardCommand extends Command
             InputOption::VALUE_REQUIRED,
             'Path to config file',
             './phpcl.yaml',
+        );
+
+        $this->addOption(
+            'generate-baseline',
+            'gb',
+            InputOption::VALUE_NONE,
+            'Generate baseline',
         );
     }
 
@@ -93,6 +102,18 @@ final class GuardCommand extends Command
         // Output results
         $output->writeln('');
         $output->writeln('');
+
+        if ($input->getOption('generate-baseline')) {
+            $output->writeln('> Baseline generated');
+            $output->writeln('');
+
+            $this->baseliner->generateBaseline($config->baseline, ...$violations);
+        }
+
+        $violations = array_filter(
+            $violations,
+            fn ($violation) => !$this->baseliner->isInBaseline($config->baseline, $violation),
+        );
 
         if (count($violations) === 0) {
             $output->writeln('✅ <fg=green>No violations!</>');

@@ -25,20 +25,23 @@ vendor/bin/phpcl init
 It will copy a configuration yaml file [`phpcl.yaml`](resources/templates/phpcl.yaml) and a template Guard test class [`CleanArchitectureGuard.php`](resources/templates/CleanArchitectureGuard.php).
 
 ### The configuration file
+Default `phpcl.yaml`:
 ```yaml
 parameters:
   path:
     source: ./src
     guards:
       - CleanArchitectureGuard.php
+  baseline: ./phpcl-baseline.yaml
 ```
 
 Configuration options:
 
-| Option         | Description                                                                       | Format                       |
-|----------------|-----------------------------------------------------------------------------------|------------------------------|
-| `path.source`  | Path to your src directory                                                        | `string`                     | 
-| `path.guards`  | A set of paths to your Guard test classes (directories and/or direct files paths) | `list\<string\>` or `string` |
+| Option         | Description                                                                        | Format                     |
+|----------------|------------------------------------------------------------------------------------|----------------------------|
+| `path.source`  | Path to your src directory                                                         | `string`                   | 
+| `path.guards`  | A set of paths to your Guard test classes (directories and/or direct files paths)  | `list<string>` or `string` |
+| `baseline`     | Baseline filename                                                                  | `string`                   |
 
 ### The Guard test class 
 A Guard test class consists of one or more test cases, registered with the `#[Test]` Attributes.
@@ -85,5 +88,5 @@ The predefined layer `RootLevelClasses` can be used to for native PHP functions,
 ## Usage
 Run the following:
 ```bash
-vendor/bin/phpcl guard [--config=./phpcl.yaml]
+vendor/bin/phpcl guard [--config=./phpcl.yaml] [--generate-baseline]
 ```

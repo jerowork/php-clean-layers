@@ -12,6 +12,7 @@ final class Config
     public function __construct(
         public readonly string $sourcePath,
         public readonly array $guardsPaths,
+        public readonly string $baseline,
     ) {
     }
 }
